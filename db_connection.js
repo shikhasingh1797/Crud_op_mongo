@@ -1,6 +1,8 @@
 const mongoose = require("mongoose");
+const name=process.env.DB_USERNAME
+const pass=process.env.DB_PASSWORD
 mongoose.connect(
-    "mongodb+srv://Shikha:mahi@123@cluster0.rov3q.mongodb.net/myFirstDatabase?retryWrites=true&w=mydata",
+  "mongodb+srv://"+name+":"+pass+"@cluster0.rov3q.mongodb.net/mydata?retryWrites=true&w=majority",
     {
       useNewUrlParser: true,
       useFindAndModify: false,
