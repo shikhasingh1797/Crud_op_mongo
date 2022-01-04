@@ -3,22 +3,27 @@ const app = express();
 
 const foodModel = require("./food_table");
 
-app.post("/foods", async (request, response) => {
+app.post("/food", async (request, response) => {
   const foods = new foodModel(request.body)
   try {
     await foods.save();
     response.send(foods);
   } catch (error) {
-    response.status(400).send("It is Bad request..");
+    console.log(error.name)
+    if(!error.name=="ValidationError"){response.status(400).send({message:"Name is required.."})}
+    else{
+    response.status(400).send({message:"Calories is required.."});
+    }
+    console.log(error)
   }
 });
 
-app.get("/food-data", async (request, response) => { 
+app.get("/food", async (request, response) => { 
     try{
       const foods = await foodModel.find({}); 
       response.send(foods);
     } catch (error) {
-      response.status(404).send("Data not found....");
+      response.status(500).send({message:"server error...."})
     }
 });
 
@@ -26,17 +31,17 @@ app.patch("/food/:id", async (request, response) => {
   try {
     const food=await foodModel.findByIdAndUpdate(request.params.id, request.body);
     if(!food) response.status(404).send("Did not updated")
-    response.status(200).send("Updated sucessfully....");
+    response.status(200).send({message:"Updated sucessfully...."});
   } catch (error) {
-    response.status(404).send("Id is not found....");
+    response.status(404).send({message:"Id is not found...."});
   }
 });
 
 app.delete("/food/:id", async (request, response) => {
   try {
     const food = await foodModel.findByIdAndDelete(request.params.id);
-    if (!food) response.status(404).send("No item found");
-    response.status(200).send("Specific Id data deleted sucessfully....");
+    if (!food) response.status(404).send({message:"No item found"});
+    response.status(200).send({message:"Specific Id data deleted sucessfully...."});
   } catch (error) {
     response.status(500).send(error);
   }
