@@ -8,13 +8,8 @@ app.post("/food", async (request, response) => {
   try {
     await foods.save();
     response.send(foods);
-  } catch (error) {
-    console.log(error.name)
-    if(!error.name=="ValidationError"){response.status(400).send({message:"Name is required.."})}
-    else{
-    response.status(400).send({message:"Calories is required.."});
-    }
-    console.log(error)
+  } catch (error) {    
+    response.status(400).send(error.message);
   }
 });
 
@@ -43,7 +38,7 @@ app.delete("/food/:id", async (request, response) => {
     if (!food) response.status(404).send({message:"No item found"});
     response.status(200).send({message:"Specific Id data deleted sucessfully...."});
   } catch (error) {
-    response.status(500).send(error);
+    response.status(500).send(error.message);
   }
 });
 
