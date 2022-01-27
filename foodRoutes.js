@@ -16,6 +16,7 @@ app.post("/food", async (request, response) => {
 app.get("/food", async (request, response) => { 
     try{
       const foods = await foodModel.find({}); 
+      // console.log(foods,"***")
       response.send(foods);
     } catch (error) {
       response.status(500).send({message:"server error...."})
